@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background-color: #fff;
+
+  .left-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .title {
+      font-size: 16px;
+    }
+  }
+
+  .right-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .user-pic {
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+}

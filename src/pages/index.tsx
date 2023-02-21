@@ -1,20 +1,18 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-const inter = Inter({ subsets: ["latin"] });
+const Home = () => {
+  const router = useRouter();
 
-export default function Home() {
-  return (
-    <>
-      <Head>
-        <title>Petishh</title>
-        <meta name="description" content="Petishh Admin Panel" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}></main>
-    </>
-  );
-}
+  useEffect(() => {
+    const isLoggedIn = !!(
+      typeof window !== "undefined" && localStorage.getItem("user-access-token")
+    );
+
+    router.replace(isLoggedIn ? "/dashboard" : "/login");
+  }, [router]);
+
+  return <div style={{ padding: "2rem" }}>Redirecting...</div>;
+};
+
+export default Home;
