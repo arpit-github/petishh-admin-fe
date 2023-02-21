@@ -5,6 +5,7 @@ import { ConfigProvider } from "antd";
 
 import "src/styles/globals.css";
 import "src/styles/variables.css";
+import "src/styles/antd.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [themeColors, setThemeColors] = useState({});
