@@ -13,7 +13,7 @@ api.interceptors.request.use((config: any) => {
     "Access-Control-Allow-Headers":
       "Origin, X-Requested-With, Content-Type, Accept",
   };
-
+  config.url = process.env.API_COMMON_END_POINT + config.url;
   const token = localStorage.getItem("user-access-token");
 
   if (token) {
