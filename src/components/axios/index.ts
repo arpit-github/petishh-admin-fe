@@ -13,11 +13,13 @@ api.interceptors.request.use((config: any) => {
     "Access-Control-Allow-Headers":
       "Origin, X-Requested-With, Content-Type, Accept",
   };
-  config.url = process.env.API_COMMON_END_POINT + config.url;
-  const token = localStorage.getItem("user-access-token");
 
-  if (token) {
-    config.headers["Authorization"] = token;
+  config.url = process.env.API_COMMON_END_POINT + config.url;
+
+  const userDetails = localStorage.getItem("user-details");
+  if (userDetails && JSON.parse(userDetails)?.accessToken?.access_token) {
+    config.headers["Authorization"] =
+      JSON.parse(userDetails).accessToken.access_token;
   }
 
   return config;
@@ -28,8 +30,8 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    const token = localStorage.getItem("user-access-token");
-    if (error.response?.status === 401 && token) {
+    const userDetails = localStorage.getItem("user-details");
+    if (error.response?.status === 401 && userDetails) {
       message.error({
         content: "User not unauthorized!",
         key: "unauthorized",

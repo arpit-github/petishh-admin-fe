@@ -1,0 +1,113 @@
+.wrapper {
+  background-color: var(--primary-color);
+  height: 100vh;
+  overflow: auto;
+  color: white;
+  display: flex;
+  position: relative;
+
+  .logo-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    p {
+      font-size: 32px;
+    }
+  }
+
+  .inner-wrapper {
+    margin: auto;
+    padding: 100px 0;
+    // text-align: center;
+
+    .title {
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 4px;
+      width: 500px;
+      padding: 15px;
+      color: rgba(0, 0, 0, 0.7);
+      text-align: unset;
+
+      @media (max-width: 768px) {
+        min-width: 300px;
+        max-width: 500px;
+        width: calc(100vw - 50px);
+      }
+
+      .form-container {
+        .title {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 21px;
+          color: rgba(0, 0, 0, 0.8);
+        }
+
+        :global {
+          .ant-form-item-label label {
+            color: rgba(0, 0, 0, 0.4);
+            height: auto;
+          }
+
+          .ant-btn-primary[disabled],
+          .ant-btn-primary[disabled]:hover,
+          .ant-btn-primary[disabled]:focus,
+          .ant-btn-primary[disabled]:active {
+            color: white;
+          }
+        }
+
+        .under-input {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 12px;
+          margin-bottom: 20px;
+
+          :global {
+            .ant-form-item {
+              margin-bottom: 0 !important;
+            }
+          }
+
+          .checkbox-title {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 21px;
+            color: rgba(0, 0, 0, 0.6);
+          }
+
+          .forgot-password {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 21px;
+            color: #151f29;
+          }
+        }
+
+        .form-submit-btn {
+          width: 100%;
+          height: 38px;
+        }
+
+        .login-heading {
+          margin-top: 18px;
+        }
+      }
+    }
+  }
+}

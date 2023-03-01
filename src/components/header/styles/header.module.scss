@@ -23,8 +23,16 @@
     align-items: center;
 
     .user-pic {
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-color-light);
+      font-weight: bold;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
     }
   }
 }

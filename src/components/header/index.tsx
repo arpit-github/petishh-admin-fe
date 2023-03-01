@@ -1,6 +1,9 @@
+import { Dropdown, MenuProps } from "antd";
 import Image, { StaticImageData } from "next/image";
+import { useRouter } from "next/router";
+import { forwardRef } from "react";
 
-import Avatar from "public/avatar.png";
+import { useUserContext } from "src/constants/user-context";
 
 import styles from "./styles/header.module.scss";
 
@@ -9,9 +12,21 @@ interface IProps {
   icon?: StaticImageData | string;
 }
 
-const Header = ({ title, icon }: IProps) => {
+const Header = forwardRef<HTMLDivElement, IProps>(function Header({ title, icon }, ref) {
+  const router = useRouter();
+  const [userDetails] = useUserContext();
+  const firstName = userDetails.firstName || "";
+  const initial = (firstName[0] || "A").toUpperCase();
+
+  const onMenuClick: MenuProps["onClick"] = (event) => {
+    if (event.key === "logout") {
+      localStorage.clear();
+      router.push("/login");
+    }
+  };
+
   return (
-    <div className={styles["wrapper"]}>
+    <div className={styles["wrapper"]} ref={ref}>
       <div className={styles["left-wrapper"]}>
         {icon && (
           <Image
@@ -26,17 +41,20 @@ const Header = ({ title, icon }: IProps) => {
       </div>
 
       <div className={styles["right-wrapper"]}>
-        <div>Hi, User</div>
-        <Image
-          alt="user"
-          src={Avatar}
-          width={25}
-          height={25}
-          className={styles["user-pic"]}
-        />
+        <div>Hi, {firstName}</div>
+        <Dropdown
+          menu={{
+            items: [{ key: "logout", label: "Logout" }],
+            onClick: onMenuClick,
+          }}
+        >
+          <div className={styles["user-pic"]}>
+            <p>{initial}</p>
+          </div>
+        </Dropdown>
       </div>
     </div>
   );
-};
+});
 
 export default Header;

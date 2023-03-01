@@ -2,30 +2,33 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { ConfigProvider } from "antd";
-import { useRouter } from "next/router";
+import MidleWareAuthenitcation from "./_auth";
 
+import api from "src/components/axios";
+import { UserProvider } from "src/constants/user-context";
 import "src/styles/globals.css";
 import "src/styles/variables.css";
 import "src/styles/antd.css";
 
-export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter();
+function App({ Component, pageProps }: AppProps) {
+  const [userDetails, setUserDetails] = useState({});
   const [themeColors, setThemeColors] = useState({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const colorPrimary = getComputedStyle(
-        document.documentElement
-      ).getPropertyValue("--primary-color");
+      const computedStyle = getComputedStyle(document.documentElement);
+      const colorPrimary = computedStyle.getPropertyValue("--primary-color");
       setThemeColors({ colorPrimary });
-      const token = localStorage["user-access-token"];
-      if (token && router.pathname === "/login") {
-        router.replace("/dashboard");
-      } else if (!token && router.pathname !== "/login") {
-        router.replace("/login");
-      }
+
+      const userDetailsString = localStorage.getItem("user-details");
+      try {
+        if (userDetailsString) {
+          const tempObj = JSON.parse(userDetailsString);
+          setUserDetails(tempObj);
+        }
+      } catch (e) {}
     }
-  }, [router]);
+  }, []);
 
   return (
     <>
@@ -36,8 +39,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ConfigProvider theme={{ token: themeColors }}>
-        <Component {...pageProps} />
+        <UserProvider value={{ userDetails, setUserDetails }}>
+          <Component {...pageProps} />
+        </UserProvider>
       </ConfigProvider>
     </>
   );
 }
+
+export default MidleWareAuthenitcation(App);

@@ -6,7 +6,7 @@ const Home = () => {
 
   useEffect(() => {
     const isLoggedIn = !!(
-      typeof window !== "undefined" && localStorage.getItem("user-access-token")
+      typeof window !== "undefined" && localStorage.getItem("user-details")
     );
     router.replace(isLoggedIn ? "/dashboard" : "/login");
   }, []);

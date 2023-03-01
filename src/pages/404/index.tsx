@@ -7,10 +7,7 @@ const NotFound = () => {
 
   useEffect(() => {
     setIsLoggedIn(
-      !!(
-        typeof window !== "undefined" &&
-        localStorage.getItem("user-access-token")
-      )
+      !!(typeof window !== "undefined" && localStorage.getItem("user-details"))
     );
   }, []);
 
