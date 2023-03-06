@@ -19,9 +19,9 @@ export const menus = [
     route: "/service-providers",
     icon: ServiceProviderImage,
   },
-  {
-    title: "Bookings",
-    route: "/bookings",
-    icon: BookingImage,
-  },
+  // {
+  //   title: "Bookings",
+  //   route: "/bookings",
+  //   icon: BookingImage,
+  // },
 ];

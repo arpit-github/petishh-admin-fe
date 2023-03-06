@@ -4,4 +4,11 @@
 
 .ant-table-wrapper .ant-pagination {
   margin-bottom: 0 !important;
+  position: relative;
+}
+
+.ant-table-wrapper .ant-pagination .ant-pagination-total-text {
+  position: absolute;
+  left: 0;
+  top: 0;
 }

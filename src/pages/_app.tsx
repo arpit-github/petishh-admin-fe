@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { ConfigProvider } from "antd";
 import MidleWareAuthenitcation from "./_auth";
 
-import api from "src/components/axios";
 import { UserProvider } from "src/constants/user-context";
 import "src/styles/globals.css";
 import "src/styles/variables.css";

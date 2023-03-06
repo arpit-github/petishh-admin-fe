@@ -4,16 +4,16 @@ import type { ColumnsType } from "antd/es/table";
 
 import Header from "src/components/header";
 import PrivateLayout from "src/components/privateLayout";
-import { ICustomer } from "src/constants/customer-interface";
-import CustomerImage from "public/customer.png";
+import { IServiceProvider } from "src/constants/service-provider-interface";
+import ServiceProviderImage from "public/service-provider.png";
 import api from "src/components/axios";
 import Card from "src/components/card";
 
-const Customers = () => {
+const ServiceProviders = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<ICustomer[]>([]);
+  const [data, setData] = useState<IServiceProvider[]>([]);
   const [pagination, setPagination] = useState({
     current: 0,
     pageSize: 25,
@@ -25,10 +25,10 @@ const Customers = () => {
       setLoading(true);
       api
         .get(
-          `/customer?limit=${pagination.pageSize}&page=${pagination.current}`
+          `/service-provider?limit=${pagination.pageSize}&page=${pagination.current}`
         )
         .then((r) => {
-          setData(r.data?.data?.customers || []);
+          setData(r.data?.data?.serviceProviders || []);
           setPagination((prev) => ({
             ...prev,
             total: r.data?.data?.totalItems || 0,
@@ -39,54 +39,66 @@ const Customers = () => {
     })();
   }, [pagination.pageSize, pagination.current]);
 
-  const columns: ColumnsType<ICustomer> = [
-    {
-      title: "Customer ID",
-      dataIndex: "customer_id",
-      render: (val: string) => val || "--",
-      width: 150,
-    },
+  const columns: ColumnsType<IServiceProvider> = [
     {
       title: "First Name",
       dataIndex: "first_name",
-      render: (val: string) => val || "--",
+      render: (val) => val || "--",
       width: 120,
     },
     {
       title: "Last Name",
       dataIndex: "last_name",
-      render: (val: string) => val || "--",
+      render: (val) => val || "--",
       width: 120,
     },
     {
       title: "Email",
       dataIndex: "email_id",
       width: 250,
-      render: (val: string) => val || "--",
+      render: (val) => val || "--",
     },
     {
       title: "Mobile Number",
       dataIndex: "mobile_number",
       width: 135,
-      render: (val: string | number) => val || "--",
+      render: (val) => val || "--",
     },
     {
-      title: "Referral Code",
-      dataIndex: "referral_code",
-      width: 125,
-      render: (val: string) => val || "--",
+      title: "Gender",
+      dataIndex: "gender",
+      width: 100,
+      render: (val) => val || "--",
     },
     {
-      title: "Created On",
-      dataIndex: "created_at_str",
-      width: 230,
-      render: (val: string) => val || "--",
+      title: "Services Provided",
+      dataIndex: "service_types",
+      width: 160,
+      render: (val) => (val?.length ? val.join(", ") : "--"),
     },
     {
-      title: "Total Pets",
-      dataIndex: "pets",
-      width: 130,
-      render: (val: any[]) => val?.length || 0,
+      title: "Outwards Payment",
+      dataIndex: "outwardPayments",
+      width: 160,
+      render: (val) => (val || val === 0 ? val : "--"),
+    },
+    {
+      title: "Avg. Rating",
+      dataIndex: "avgRating",
+      width: 120,
+      render: (val) => (val || val === 0 ? val : "--"),
+    },
+    {
+      title: "Total Rating",
+      dataIndex: "totalRatings",
+      width: 120,
+      render: (val) => (val || val === 0 ? val : "--"),
+    },
+    {
+      title: "Servicable Zipcodes",
+      dataIndex: "serviceable_zip_codes",
+      width: 180,
+      render: (val) => (val?.length ? val.join(", ") : "--"),
     },
   ];
 
@@ -97,13 +109,17 @@ const Customers = () => {
 
   return (
     <PrivateLayout>
-      <Header title="Customers" icon={CustomerImage} ref={headerRef} />
+      <Header
+        title="Service Providers"
+        icon={ServiceProviderImage}
+        ref={headerRef}
+      />
 
       <Card>
         <div ref={wrapperRef}>
           <Table
             loading={loading}
-            rowKey={(row) => row.customer_id}
+            rowKey={(row) => row.service_provider_id}
             dataSource={data}
             columns={columns}
             scroll={{
@@ -122,7 +138,7 @@ const Customers = () => {
               showTotal: (total, range) => (
                 <span>
                   Showing <b>{range[0]}</b> - <b>{range[1]}</b> of{" "}
-                  <b>{total}</b> Customers
+                  <b>{total}</b> Service Providers
                 </span>
               ),
               onChange(page, pageSize) {
@@ -140,4 +156,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default ServiceProviders;
