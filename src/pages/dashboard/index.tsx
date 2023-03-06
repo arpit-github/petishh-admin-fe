@@ -1,14 +1,16 @@
-import Header from "src/components/header";
-import PrivateLayout from "src/components/privateLayout";
-
+import Header from "src/components/common/header";
+import DashboardSalesCard from "src/components/dashboard/sales";
+import DashboardOrdersCard from "src/components/dashboard/orders";
 import DashboardImage from "public/dashboard.png";
-
 
 const Dashboard = () => {
   return (
-    <PrivateLayout>
+    <>
       <Header title="Dashboard" icon={DashboardImage} />
-    </PrivateLayout>
+
+      <DashboardOrdersCard />
+      <DashboardSalesCard />
+    </>
   );
 };
 

@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
-import Header from "src/components/header";
-import PrivateLayout from "src/components/privateLayout";
+import Header from "src/components/common/header";
 import { IServiceProvider } from "src/constants/service-provider-interface";
 import ServiceProviderImage from "public/service-provider.png";
 import api from "src/components/axios";
-import Card from "src/components/card";
+import Card from "src/components/common/card";
 
 const ServiceProviders = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -21,22 +20,20 @@ const ServiceProviders = () => {
   });
 
   useEffect(() => {
-    (function () {
-      setLoading(true);
-      api
-        .get(
-          `/service-provider?limit=${pagination.pageSize}&page=${pagination.current}`
-        )
-        .then((r) => {
-          setData(r.data?.data?.serviceProviders || []);
-          setPagination((prev) => ({
-            ...prev,
-            total: r.data?.data?.totalItems || 0,
-          }));
-        })
-        .catch(console.log)
-        .finally(() => setLoading(false));
-    })();
+    setLoading(true);
+    api
+      .get(
+        `/service-provider?limit=${pagination.pageSize}&page=${pagination.current}`
+      )
+      .then((r) => {
+        setData(r.data?.data?.serviceProviders || []);
+        setPagination((prev) => ({
+          ...prev,
+          total: r.data?.data?.totalItems || 0,
+        }));
+      })
+      .catch(console.log)
+      .finally(() => setLoading(false));
   }, [pagination.pageSize, pagination.current]);
 
   const columns: ColumnsType<IServiceProvider> = [
@@ -108,7 +105,7 @@ const ServiceProviders = () => {
   );
 
   return (
-    <PrivateLayout>
+    <>
       <Header
         title="Service Providers"
         icon={ServiceProviderImage}
@@ -152,7 +149,7 @@ const ServiceProviders = () => {
           />
         </div>
       </Card>
-    </PrivateLayout>
+    </>
   );
 };
 

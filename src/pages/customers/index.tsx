@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
-import Header from "src/components/header";
-import PrivateLayout from "src/components/privateLayout";
+import Header from "src/components/common/header";
 import { ICustomer } from "src/constants/customer-interface";
 import CustomerImage from "public/customer.png";
 import api from "src/components/axios";
-import Card from "src/components/card";
+import Card from "src/components/common/card";
 
 const Customers = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -21,22 +20,18 @@ const Customers = () => {
   });
 
   useEffect(() => {
-    (function () {
-      setLoading(true);
-      api
-        .get(
-          `/customer?limit=${pagination.pageSize}&page=${pagination.current}`
-        )
-        .then((r) => {
-          setData(r.data?.data?.customers || []);
-          setPagination((prev) => ({
-            ...prev,
-            total: r.data?.data?.totalItems || 0,
-          }));
-        })
-        .catch(console.log)
-        .finally(() => setLoading(false));
-    })();
+    setLoading(true);
+    api
+      .get(`/customer?limit=${pagination.pageSize}&page=${pagination.current}`)
+      .then((r) => {
+        setData(r.data?.data?.customers || []);
+        setPagination((prev) => ({
+          ...prev,
+          total: r.data?.data?.totalItems || 0,
+        }));
+      })
+      .catch(console.log)
+      .finally(() => setLoading(false));
   }, [pagination.pageSize, pagination.current]);
 
   const columns: ColumnsType<ICustomer> = [
@@ -96,7 +91,7 @@ const Customers = () => {
   );
 
   return (
-    <PrivateLayout>
+    <>
       <Header title="Customers" icon={CustomerImage} ref={headerRef} />
 
       <Card>
@@ -136,7 +131,7 @@ const Customers = () => {
           />
         </div>
       </Card>
-    </PrivateLayout>
+    </>
   );
 };
 
