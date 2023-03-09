@@ -9,30 +9,35 @@ import {
 import api from "src/components/axios";
 import Card from "src/components/common/card";
 import { IDashboardData } from "src/constants/dashboard-interface";
+import { IServiceProvider } from "src/constants/service-provider-interface";
 
 import styles from "../styles/dashboard.module.scss";
 
-const DashboardOrdersCard = () => {
+interface IProps {
+  serviceProviders: IServiceProvider[];
+}
+
+const DashboardOrdersCard = ({ serviceProviders }: IProps) => {
   const [duration, setDuration] = useState(dashboardDurationOptions[0].value);
   const [serviceProvider, setServiceProvider] = useState(undefined);
-  const [services, setServices] = useState(undefined);
+  const [service, setService] = useState(undefined);
   const [data, setData] = useState<IDashboardData>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const dashboardParam = generateDashboardDateParamsString(duration);
-
+    const dashboardDateParam = generateDashboardDateParamsString(duration);
     setLoading(true);
     api
-      .get(`/statistical?${dashboardParam}`, {
+      .get(`/statistical?${dashboardDateParam}`, {
         params: {
           statistical_type: "TOTAL_ORDERS",
+          service_provider_id: serviceProvider,
         },
       })
       .then((r) => setData(r?.data?.data || {}))
       .catch(console.log)
       .finally(() => setLoading(false));
-  }, [duration, serviceProvider, services]);
+  }, [duration, serviceProvider, service]);
 
   const dataExists =
     (data?.dayWiseData && Object.keys(data.dayWiseData || {}).length > 0) ||
@@ -54,17 +59,22 @@ const DashboardOrdersCard = () => {
             options={dashboardDurationOptions}
           />
           <Select
+            allowClear
             placeholder="Service Providers"
             value={serviceProvider}
             style={{ width: 120, marginRight: 10 }}
             onChange={setServiceProvider}
-            options={[]}
+            options={serviceProviders.map((el) => ({
+              label: `${el.first_name || ""} ${el.last_name || ""}`,
+              value: el.service_provider_id,
+            }))}
           />
           <Select
-            placeholder="Services"
-            value={services}
+            allowClear
+            placeholder="Service"
+            value={service}
             style={{ width: 120 }}
-            onChange={setServices}
+            onChange={setService}
             options={[]}
           />
         </div>

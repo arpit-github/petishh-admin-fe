@@ -17,7 +17,7 @@ interface IProps {
   serviceProviders: IServiceProvider[];
 }
 
-const DashboardSalesCard = ({ serviceProviders }: IProps) => {
+const DashboardReceivablePaymentsCard = ({ serviceProviders }: IProps) => {
   const [duration, setDuration] = useState(dashboardDurationOptions[0].value);
   const [serviceProvider, setServiceProvider] = useState(undefined);
   const [service, setService] = useState(undefined);
@@ -31,7 +31,7 @@ const DashboardSalesCard = ({ serviceProviders }: IProps) => {
     api
       .get(`/statistical?${dashboardParam}`, {
         params: {
-          statistical_type: "TOTAL_SALE",
+          statistical_type: "TOTAL_RECEIVABLES_PAYMENTS",
           service_provider_id: serviceProvider,
         },
       })
@@ -50,7 +50,7 @@ const DashboardSalesCard = ({ serviceProviders }: IProps) => {
         className={`flex justify-space-between align-center ${styles["title-div"]}`}
       >
         <p className={styles["title"]}>
-          {`Total Sales - ₹${data?.accumulatedValue || 0}`}
+          {`Total Receivable Payments - ₹${data?.accumulatedValue || 0}`}
         </p>
         <div>
           <Select
@@ -126,4 +126,4 @@ const DashboardSalesCard = ({ serviceProviders }: IProps) => {
   );
 };
 
-export default DashboardSalesCard;
+export default DashboardReceivablePaymentsCard;

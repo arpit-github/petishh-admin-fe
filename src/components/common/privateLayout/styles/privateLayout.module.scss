@@ -1,10 +1,13 @@
 .wrapper {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
 
   .left-wrapper {
     width: var(--left-menu-width);
     background-color: #fff;
+    position: fixed;
+    top: 0;
+    height: 100vh;
 
     .logo-wrapper {
       display: flex;
@@ -48,7 +51,8 @@
   }
 
   .main-content {
+    margin-left: var(--left-menu-width);
     width: calc(100% - var(--left-menu-width));
-    padding: 24px 24px 0;
+    padding: 0 24px 0 24px;
   }
 }

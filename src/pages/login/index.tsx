@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-import { useRouter } from "next/router";
 import Image from "next/image";
 
 import LogoIcon from "public/logo.svg";
@@ -13,7 +12,6 @@ interface ILoginFormValues {
 }
 
 const Login = () => {
-  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
   const handleLogin = (values: ILoginFormValues) => {
@@ -28,7 +26,7 @@ const Login = () => {
             duration: 4,
           });
           localStorage.setItem("user-details", JSON.stringify(resp.data.data));
-          router.replace("/");
+          window.location.pathname = "/";
         } else {
           message.error({
             content: resp.data?.status || "Login failed!",

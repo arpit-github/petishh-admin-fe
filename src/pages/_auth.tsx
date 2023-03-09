@@ -15,10 +15,10 @@ const MidleWareAuthenitcation = (Component: any) => {
     );
 
     if (isWindowAvailable && !isLoggedIn && router.pathname !== "/login") {
-      router.replace("/login");
+      window.location.pathname = ("/login");
       return <></>;
     } else if (isWindowAvailable && isLoggedIn && router.pathname === "/login") {
-      router.replace("/");
+      window.location.pathname = ("/");
       return <></>;
     }
     return isWindowAvailable ? <Component {...props} /> : null;
