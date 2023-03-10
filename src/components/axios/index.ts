@@ -1,9 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 
-const api = axios.create({
-  baseURL: process.env.API_BASE_URL,
-});
+const api = axios.create();
 
 api.interceptors.request.use((config: any) => {
   config.headers = {

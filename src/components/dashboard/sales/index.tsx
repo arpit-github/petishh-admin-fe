@@ -10,14 +10,16 @@ import api from "src/components/axios";
 import Card from "src/components/common/card";
 import { IDashboardData } from "src/constants/dashboard-interface";
 import { IServiceProvider } from "src/constants/service-provider-interface";
+import { IPackage } from "src/constants/package-interface";
 
 import styles from "../styles/dashboard.module.scss";
 
 interface IProps {
   serviceProviders: IServiceProvider[];
+  services: IPackage[];
 }
 
-const DashboardSalesCard = ({ serviceProviders }: IProps) => {
+const DashboardSalesCard = ({ serviceProviders, services }: IProps) => {
   const [duration, setDuration] = useState(dashboardDurationOptions[0].value);
   const [serviceProvider, setServiceProvider] = useState(undefined);
   const [service, setService] = useState(undefined);
@@ -33,6 +35,7 @@ const DashboardSalesCard = ({ serviceProviders }: IProps) => {
         params: {
           statistical_type: "TOTAL_SALE",
           service_provider_id: serviceProvider,
+          package_id: service,
         },
       })
       .then((r) => setData(r?.data?.data || {}))
@@ -76,7 +79,10 @@ const DashboardSalesCard = ({ serviceProviders }: IProps) => {
             value={service}
             style={{ width: 120 }}
             onChange={setService}
-            options={[]}
+            options={services.map((el) => ({
+              label: el.title,
+              value: el.package_id,
+            }))}
           />
         </div>
       </div>

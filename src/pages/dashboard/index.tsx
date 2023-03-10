@@ -22,7 +22,7 @@ const Dashboard = () => {
       .catch(console.log);
     api
       .get(`/packages/action/list`)
-      .then((r) => console.log(r.data || []))
+      .then((r) => setServices(r.data?.data || []))
       .catch(console.log);
   }, []);
 
@@ -30,9 +30,18 @@ const Dashboard = () => {
     <>
       <Header title="Dashboard" icon={DashboardImage} />
 
-      <DashboardOrdersCard serviceProviders={serviceProviders} />
-      <DashboardSalesCard serviceProviders={serviceProviders} />
-      <DashboardReceivablePaymentsCard serviceProviders={serviceProviders} />
+      <DashboardOrdersCard
+        serviceProviders={serviceProviders}
+        services={services}
+      />
+      <DashboardSalesCard
+        serviceProviders={serviceProviders}
+        services={services}
+      />
+      <DashboardReceivablePaymentsCard
+        serviceProviders={serviceProviders}
+        services={services}
+      />
     </>
   );
 };
