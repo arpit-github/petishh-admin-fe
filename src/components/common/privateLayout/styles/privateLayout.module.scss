@@ -8,6 +8,8 @@
     position: fixed;
     top: 0;
     height: 100vh;
+    border-right: 4px solid var(--primary-color-lighter);
+    z-index: 10000;
 
     .logo-wrapper {
       display: flex;
@@ -53,6 +55,6 @@
   .main-content {
     margin-left: var(--left-menu-width);
     width: calc(100% - var(--left-menu-width));
-    padding: 0 24px 0 24px;
+    padding: 0 15px;
   }
 }
