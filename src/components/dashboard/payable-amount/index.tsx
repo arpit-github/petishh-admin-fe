@@ -2,45 +2,34 @@ import { useEffect, useState } from "react";
 import { Col, Empty, Row, Select, Spin } from "antd";
 import moment from "moment";
 
-import {
-  dashboardDurationOptions,
-  generateDashboardDateParamsString,
-} from "src/constants/dashboard";
 import api from "src/components/axios";
 import Card from "src/components/common/card";
 import { IDashboardData } from "src/constants/dashboard-interface";
-import { IPackage } from "src/constants/package-interface";
 import { IServiceProvider } from "src/constants/service-provider-interface";
 
 import styles from "../styles/dashboard.module.scss";
 
 interface IProps {
   serviceProviders: IServiceProvider[];
-  services: IPackage[];
 }
 
-const DashboardOrdersCard = ({ serviceProviders, services }: IProps) => {
-  const [duration, setDuration] = useState(dashboardDurationOptions[0].value);
+const DashboardPayableAmountCard = ({ serviceProviders }: IProps) => {
   const [serviceProvider, setServiceProvider] = useState(undefined);
-  const [service, setService] = useState(undefined);
   const [data, setData] = useState<IDashboardData>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const dashboardDateParam = generateDashboardDateParamsString(duration);
     setLoading(true);
     api
-      .get(`/statistical?${dashboardDateParam}`, {
+      .get(`/bookings/action/payable-to-service-provider`, {
         params: {
-          statistical_type: "TOTAL_ORDERS",
           service_provider_id: serviceProvider,
-          package_id: service,
         },
       })
       .then((r) => setData(r?.data?.data || {}))
       .catch(console.log)
       .finally(() => setLoading(false));
-  }, [duration, serviceProvider, service]);
+  }, [serviceProvider]);
 
   const dataExists =
     (data?.dayWiseData && Object.keys(data.dayWiseData || {}).length > 0) ||
@@ -52,28 +41,11 @@ const DashboardOrdersCard = ({ serviceProviders, services }: IProps) => {
         className={`flex justify-space-between align-center ${styles["title-div"]}`}
       >
         <p className={styles["title"]}>
-          {`Total Orders - ${data?.accumulatedValue || 0}`}
+          {`Amount payable to service providers - ₹${
+            data?.accumulatedValue || 0
+          }`}
         </p>
         <div className={styles["filter-wrapper"]}>
-          <Select
-            value={duration}
-            style={{ width: 120 }}
-            onChange={setDuration}
-            options={dashboardDurationOptions}
-          />
-          <Select
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            placeholder="Service"
-            value={service}
-            className={styles["select-filter"]}
-            onChange={setService}
-            options={services.map((el) => ({
-              label: el.title,
-              value: el.package_id,
-            }))}
-          />
           <Select
             allowClear
             showSearch
@@ -107,7 +79,7 @@ const DashboardOrdersCard = ({ serviceProviders, services }: IProps) => {
                     <p className={styles["data-el-label"]}>
                       {moment(el, "YYYYMMDD").format("Do MMM YYYY")} -
                     </p>
-                    <p>{data.dayWiseData[el] || 0}</p>
+                    <p>₹{data.dayWiseData[el] || 0}</p>
                   </Col>
                 ))}
 
@@ -121,7 +93,7 @@ const DashboardOrdersCard = ({ serviceProviders, services }: IProps) => {
                     <p className={styles["data-el-label"]}>
                       {moment(el, "YYYYMM").format("MMM YYYY")} -
                     </p>
-                    <p>{data.monthWiseData[el] || 0}</p>
+                    <p>₹{data.monthWiseData[el] || 0}</p>
                   </Col>
                 ))}
               </Row>
@@ -135,4 +107,4 @@ const DashboardOrdersCard = ({ serviceProviders, services }: IProps) => {
   );
 };
 
-export default DashboardOrdersCard;
+export default DashboardPayableAmountCard;

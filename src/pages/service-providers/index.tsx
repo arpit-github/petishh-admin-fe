@@ -124,7 +124,7 @@ const ServiceProviders = () => {
                 (wrapperRef.current?.clientWidth || 0) > totalColWidth
                   ? wrapperRef.current?.clientWidth
                   : totalColWidth,
-              y: `calc(100vh - 190px - ${headerRef?.current?.clientHeight}px)`,
+              y: `calc(100vh - 148px - ${headerRef?.current?.clientHeight}px)`,
             }}
             pagination={{
               current: pagination.current + 1,

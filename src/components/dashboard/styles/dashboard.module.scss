@@ -7,6 +7,17 @@
     font-size: 16px;
     font-weight: 500;
   }
+
+  .filter-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+
+    .select-filter {
+      width: 150px;
+    }
+  }
 }
 
 .data-el {

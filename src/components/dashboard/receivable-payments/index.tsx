@@ -58,33 +58,37 @@ const DashboardReceivablePaymentsCard = ({
         <p className={styles["title"]}>
           {`Total Receivable Payments - ₹${data?.accumulatedValue || 0}`}
         </p>
-        <div>
+        <div className={styles["filter-wrapper"]}>
           <Select
             value={duration}
-            style={{ width: 120, marginRight: 10 }}
+            style={{ width: 120 }}
             onChange={setDuration}
             options={dashboardDurationOptions}
           />
           <Select
             allowClear
-            placeholder="Service Providers"
-            value={serviceProvider}
-            style={{ width: 120, marginRight: 10 }}
-            onChange={setServiceProvider}
-            options={serviceProviders.map((el) => ({
-              label: `${el.first_name || ""} ${el.last_name || ""}`,
-              value: el.service_provider_id,
-            }))}
-          />
-          <Select
-            allowClear
+            showSearch
+            optionFilterProp="label"
             placeholder="Services"
             value={service}
-            style={{ width: 120 }}
+            className={styles['select-filter']}
             onChange={setService}
             options={services.map((el) => ({
               label: el.title,
               value: el.package_id,
+            }))}
+          />
+          <Select
+            allowClear
+            showSearch
+            optionFilterProp="label"
+            placeholder="Service Providers"
+            value={serviceProvider}
+            className={styles['select-filter']}
+            onChange={setServiceProvider}
+            options={serviceProviders.map((el) => ({
+              label: `${el.first_name || ""} ${el.last_name || ""}`,
+              value: el.service_provider_id,
             }))}
           />
         </div>
