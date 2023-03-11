@@ -35,7 +35,13 @@ const Login = () => {
           });
         }
       })
-      .catch(console.log)
+      .catch((err) =>
+        message.error({
+          content: err.response?.data?.data || "Login failed!",
+          key: "login",
+          duration: 4,
+        })
+      )
       .finally(() => {
         setSubmitting(false);
       });
