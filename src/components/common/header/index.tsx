@@ -47,6 +47,7 @@ const Header = forwardRef<HTMLDivElement, IProps>(function Header(
         <div className={styles["right-wrapper"]}>
           <div>Hi, {firstName}</div>
           <Dropdown
+            getPopupContainer={(ref) => ref}
             menu={{
               items: [{ key: "logout", label: "Logout" }],
               onClick: onMenuClick,
