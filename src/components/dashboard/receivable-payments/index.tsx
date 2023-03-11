@@ -71,7 +71,7 @@ const DashboardReceivablePaymentsCard = ({
             optionFilterProp="label"
             placeholder="Services"
             value={service}
-            className={styles['select-filter']}
+            className={styles["select-filter"]}
             onChange={setService}
             options={services.map((el) => ({
               label: el.title,
@@ -84,7 +84,7 @@ const DashboardReceivablePaymentsCard = ({
             optionFilterProp="label"
             placeholder="Service Providers"
             value={serviceProvider}
-            className={styles['select-filter']}
+            className={styles["select-filter"]}
             onChange={setServiceProvider}
             options={serviceProviders.map((el) => ({
               label: `${el.first_name || ""} ${el.last_name || ""}`,
@@ -96,7 +96,9 @@ const DashboardReceivablePaymentsCard = ({
 
       <div>
         {loading ? (
-          <Spin />
+          <div className={styles["spinner-wrapper"]}>
+            <Spin />
+          </div>
         ) : (
           <>
             {dataExists ? (

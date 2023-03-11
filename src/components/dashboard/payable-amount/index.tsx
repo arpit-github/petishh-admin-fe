@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Col, Empty, Row, Select, Spin } from "antd";
+import { Button, Empty, message, Popconfirm, Select, Spin } from "antd";
 import moment from "moment";
 
 import api from "src/components/axios";
 import Card from "src/components/common/card";
-import { IDashboardData } from "src/constants/dashboard-interface";
+import { IAmountPayableResp } from "src/constants/dashboard-interface";
 import { IServiceProvider } from "src/constants/service-provider-interface";
 
 import styles from "../styles/dashboard.module.scss";
@@ -13,27 +13,56 @@ interface IProps {
   serviceProviders: IServiceProvider[];
 }
 
+const getRandomString = () => Math.random().toString();
+
 const DashboardPayableAmountCard = ({ serviceProviders }: IProps) => {
   const [serviceProvider, setServiceProvider] = useState(undefined);
-  const [data, setData] = useState<IDashboardData>();
+  const [data, setData] = useState<IAmountPayableResp[]>([]);
   const [loading, setLoading] = useState(false);
+  const [payingList, setPayingList] = useState<string[]>([]);
+  const [refreshTS, setRefreshTS] = useState<string>(getRandomString());
 
   useEffect(() => {
     setLoading(true);
     api
       .get(`/bookings/action/payable-to-service-provider`, {
         params: {
-          service_provider_id: serviceProvider,
+          serviceProviderId: serviceProvider,
         },
       })
-      .then((r) => setData(r?.data?.data || {}))
+      .then((r) => setData(r?.data?.data || []))
       .catch(console.log)
       .finally(() => setLoading(false));
-  }, [serviceProvider]);
+  }, [serviceProvider, refreshTS]);
 
-  const dataExists =
-    (data?.dayWiseData && Object.keys(data.dayWiseData || {}).length > 0) ||
-    (data?.monthWiseData && Object.keys(data.monthWiseData || {}).length > 0);
+  const markAsPaid = (payebleAmountObj: IAmountPayableResp) => {
+    setPayingList((prev) => [...prev, payebleAmountObj.serviceProviderId]);
+    api
+      .post(`/bookings/action/mark-amount-paid-to-service-provider`, {
+        amountPaid: payebleAmountObj.totalAmountPayable,
+        bookingIds: payebleAmountObj.amountBreakup.map((el) => el.bookingId),
+        serviceProviderId: payebleAmountObj.serviceProviderId,
+      })
+      .then((r) => {
+        message.success({
+          content: r.data?.data || "Marked successfully!",
+          key: "mark-amount-paid",
+          duration: 4,
+        });
+        setRefreshTS(getRandomString());
+      })
+      .catch(console.log)
+      .finally(() =>
+        setPayingList((prev) =>
+          prev.filter((el) => el !== payebleAmountObj.serviceProviderId)
+        )
+      );
+  };
+
+  const totalPayableAmount = data.reduce(
+    (acc, currentObj) => acc + (currentObj.totalAmountPayable || 0),
+    0
+  );
 
   return (
     <Card>
@@ -41,9 +70,7 @@ const DashboardPayableAmountCard = ({ serviceProviders }: IProps) => {
         className={`flex justify-space-between align-center ${styles["title-div"]}`}
       >
         <p className={styles["title"]}>
-          {`Amount payable to service providers - ₹${
-            data?.accumulatedValue || 0
-          }`}
+          {`Amount payable to service providers - ₹${totalPayableAmount || 0}`}
         </p>
         <div className={styles["filter-wrapper"]}>
           <Select
@@ -64,43 +91,63 @@ const DashboardPayableAmountCard = ({ serviceProviders }: IProps) => {
 
       <div>
         {loading ? (
-          <Spin />
+          <div className={styles["spinner-wrapper"]}>
+            <Spin />
+          </div>
         ) : (
-          <>
-            {dataExists ? (
-              <Row>
-                {Object.keys(data.dayWiseData || {}).map((el) => (
-                  <Col
-                    key={el}
-                    xs={24}
-                    sm={12}
-                    className={`flex align-center ${styles["data-el"]}`}
-                  >
-                    <p className={styles["data-el-label"]}>
-                      {moment(el, "YYYYMMDD").format("Do MMM YYYY")} -
-                    </p>
-                    <p>₹{data.dayWiseData[el] || 0}</p>
-                  </Col>
-                ))}
-
-                {Object.keys(data.monthWiseData || {}).map((el) => (
-                  <Col
-                    key={el}
-                    xs={24}
-                    sm={12}
-                    className={`flex align-center ${styles["data-el"]}`}
-                  >
-                    <p className={styles["data-el-label"]}>
-                      {moment(el, "YYYYMM").format("MMM YYYY")} -
-                    </p>
-                    <p>₹{data.monthWiseData[el] || 0}</p>
-                  </Col>
-                ))}
-              </Row>
+          <div className={styles["table-wrapper"]}>
+            {data?.length ? (
+              <table>
+                <colgroup>
+                  <col style={{ width: "40%" }} />
+                  <col style={{ width: "20%" }} />
+                  <col style={{ width: "20%" }} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Service Provider</th>
+                    <th>Toal Amount Payable</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((el) => (
+                    <tr key={el.serviceProviderId}>
+                      <td>
+                        {el.serviceProviderName} (
+                        {el.serviceProviderEmail ||
+                          el.serviceProviderMobile ||
+                          "--"}
+                        )
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        ₹{el.totalAmountPayable || 0}
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <Popconfirm
+                          placement="rightTop"
+                          title="Are you sure to mark this paid?"
+                          disabled={payingList.includes(el.serviceProviderId)}
+                          onConfirm={() => markAsPaid(el)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button
+                            type="primary"
+                            loading={payingList.includes(el.serviceProviderId)}
+                          >
+                            Mark as paid
+                          </Button>
+                        </Popconfirm>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             )}
-          </>
+          </div>
         )}
       </div>
     </Card>

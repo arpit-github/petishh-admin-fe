@@ -28,3 +28,27 @@
     font-weight: 500;
   }
 }
+
+.spinner-wrapper {
+  min-height: 114px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.table-wrapper {
+  table {
+    border-collapse: collapse;
+  }
+
+  table,
+  tr,
+  td,
+  th {
+    border: 1px solid rgba(0, 0, 0, 0.7);
+  }
+
+  th,
+  td {
+    padding: 5px 8px;
+  }
+}

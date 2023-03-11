@@ -93,7 +93,9 @@ const DashboardSalesCard = ({ serviceProviders, services }: IProps) => {
 
       <div>
         {loading ? (
-          <Spin />
+          <div className={styles["spinner-wrapper"]}>
+            <Spin />
+          </div>
         ) : (
           <>
             {dataExists ? (
