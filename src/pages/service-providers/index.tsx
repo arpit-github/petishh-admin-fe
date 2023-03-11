@@ -3,7 +3,10 @@ import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 import Header from "src/components/common/header";
-import { IServiceProvider } from "src/constants/service-provider-interface";
+import {
+  IOutwardPayment,
+  IServiceProvider,
+} from "src/constants/service-provider-interface";
 import ServiceProviderImage from "public/service-provider.png";
 import api from "src/components/axios";
 import Card from "src/components/common/card";
@@ -76,8 +79,24 @@ const ServiceProviders = () => {
     {
       title: "Outwards Payment",
       dataIndex: "outwardPayments",
-      width: 160,
-      render: (val) => (val || val === 0 ? val : "--"),
+      width: 300,
+      // render: (val) =>
+      //   val?.length > 0
+      //     ? val.map((obj: IOutwardPayment) => `₹${obj.amount || 0}`).join(", ")
+      //     : "--",
+      render: (val) => (
+        <div>
+          {val?.length > 0
+            ? val.map((obj: IOutwardPayment, index: number) => (
+                <div className="flex gap-1" key={index}>
+                  <span>₹{obj.amount || 0}</span>
+                  <span>-</span>
+                  <span>{obj.created_at_str}</span>
+                </div>
+              ))
+            : "--"}
+        </div>
+      ),
     },
     {
       title: "Avg. Rating",

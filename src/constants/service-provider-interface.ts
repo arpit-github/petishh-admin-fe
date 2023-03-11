@@ -7,7 +7,13 @@ export interface IServiceProvider {
   gender: string;
   avgRating: number;
   totalRatings: number;
-  outwardPayments: {};
+  outwardPayments: IOutwardPayment[];
   service_types: string[];
   serviceable_zip_codes: string[];
+}
+
+export interface IOutwardPayment {
+  amount: number;
+  created_at: number;
+  created_at_str: string;
 }
