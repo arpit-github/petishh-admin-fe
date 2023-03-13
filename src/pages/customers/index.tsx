@@ -107,6 +107,27 @@ const Customers = () => {
                       : ""}
                   </div>
                 </div>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>
+                    Appointment Time:
+                  </div>
+                  <div>
+                    {el.slotDate || "--"} {el.slotTime || ""}
+                  </div>
+                </div>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>
+                    Customer Address:
+                  </div>
+                  <div style={{ wordBreak: "break-word" }}>
+                    {el.customerAddress?.address_line_1 || ""},{" "}
+                    {el.customerAddress?.address_line_2 || ""},{" "}
+                    {el.customerAddress?.city || ""},{" "}
+                    {el.customerAddress?.state || ""},{" "}
+                    {el.customerAddress?.zip_code || ""},{" "}
+                    {el.customerAddress?.country || ""}
+                  </div>
+                </div>
                 {index < val.length - 1 && (
                   <Divider style={{ margin: "10px 0" }} />
                 )}
