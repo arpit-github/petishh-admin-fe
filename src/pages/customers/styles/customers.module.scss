@@ -1,0 +1,11 @@
+.booking-detail-item {
+  display: flex;
+//   white-space: nowrap;
+
+  .booking-details-title {
+    font-weight: 500;
+    white-space: nowrap;
+    margin-right: 8px;
+    min-width: 110px;
+  }
+}

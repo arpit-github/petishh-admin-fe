@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Table } from "antd";
+import { Divider, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 import Header from "src/components/common/header";
-import { ICustomer } from "src/constants/customer-interface";
+import { ICustomer, ICustomerBooking } from "src/constants/customer-interface";
 import CustomerImage from "public/customer.png";
 import api from "src/components/axios";
 import Card from "src/components/common/card";
+
+import styles from "./styles/customers.module.scss";
 
 const Customers = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -64,6 +66,56 @@ const Customers = () => {
       dataIndex: "mobile_number",
       width: 135,
       render: (val: string | number) => val || "--",
+    },
+    {
+      title: "Booking Details",
+      dataIndex: "bookings",
+      width: 350,
+      render: (val: []) =>
+        val?.length > 0 ? (
+          <>
+            {val.map((el: ICustomerBooking, index: number) => (
+              <div key={el.bookingId}>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>
+                    Package taken:
+                  </div>
+                  <div>{el.packageName || "--"}</div>
+                </div>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>
+                    Service:
+                  </div>
+                  <div>{el.serviceType || "--"}</div>
+                </div>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>Price:</div>
+                  <div>
+                    {el.totalPayable || el.totalPayable === 0
+                      ? `₹ ${el.totalPayable}`
+                      : "--"}
+                  </div>
+                </div>
+                <div className={styles["booking-detail-item"]}>
+                  <div className={styles["booking-details-title"]}>
+                    Service Provider:
+                  </div>
+                  <div style={{ wordBreak: "break-all" }}>
+                    {el.serviceProviderName || "--"}{" "}
+                    {el.serviceProviderEmail
+                      ? `(${el.serviceProviderEmail})`
+                      : ""}
+                  </div>
+                </div>
+                {index < val.length - 1 && (
+                  <Divider style={{ margin: "10px 0" }} />
+                )}
+              </div>
+            ))}
+          </>
+        ) : (
+          "--"
+        ),
     },
     {
       title: "Referral Code",
