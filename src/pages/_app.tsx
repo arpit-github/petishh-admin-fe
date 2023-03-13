@@ -38,7 +38,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Petishh</title>
+        <title>Petishh - Admin</title>
         <meta name="description" content="Petishh Admin Panel" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
